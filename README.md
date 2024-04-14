@@ -1,4 +1,4 @@
-# PonyTown_Bot
+# PonyTown Bot
 
 A Simple ChatBot for Pony Town
 
