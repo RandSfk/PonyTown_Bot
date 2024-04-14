@@ -2,7 +2,7 @@ from PIL import Image
 from datetime import datetime
 import time, random, re, pyautogui, pytesseract, os, requests, subprocess, rpg,sys
 
-apikey = "AIzaSyBlWES1p3aD4WDTT0s4zc_G5ZTvS7yI1mE"
+apikey = "Your GEMINI APIKEY here"
 Admin_name = ['RandSfk', 'Selvi']
 valid_username = rpg.read_usernames()
 
