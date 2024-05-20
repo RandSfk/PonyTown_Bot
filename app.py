@@ -1,19 +1,33 @@
-import re
-import os
-import random
-import subprocess
-import time
-from datetime import datetime
-import pyautogui
-from PIL import Image
-import pytesseract
-import base64
-import requests
+
+###======= Bot Configuration =======###
 
 BotName = "PonyTown"
 Admin_name = ['admin1', 'admin2']
 prefix = ['+', '.', '-']
-apikey="YOUR GEMINI API KEY HERE"
+apikey=""
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #Tentukan sesuai path Tesseract yah
+###======= Bot Configuration =======###
+
+
+
+###======= Setup =======###
+try:
+    import pytesseract
+except ModuleNotFoundError:
+    os. system("pip install pytesseract")
+
+try:
+    import PIL
+except ModuleNotFoundError:
+    os. system("pip install pillow")
+
+try:
+    import pyautogui
+except ModuleNotFoundError:
+    os. system("pip install pyautogui")
+###======= Setup =======###
+
+
 
 def press_arrow_key(direction):
     pyautogui.keyDown(direction)
@@ -118,9 +132,35 @@ def command(cmd, run):
         handle_command(text_cmd, ".kn", 'right', "kanan")
     elif ".kr" in text_cmd.lower():
         handle_command(text_cmd, ".kr", 'left', "kiri")
-
+    elif '.sm' in text_cmd:
+        match = re.search(r'\[(.*?)\](?: whispers:)? .sm \"(.*?)\" (.+)', text_cmd)
+        if match:
+            nama = match.group(1)
+            username = match.group(2)
+            messeg = match.group(3)
+            if username == nama:
+                kirim_whisp(message="Tidak bisa send secret message ke diri sendiri", username=nama)
+            else:
+                kirim_whisp(message=f"Halo {username}, anda mendapatkan pesan rahasia", username=username)
+                time.sleep(2)
+                kirim_whisp(message=messeg, username=username)
+                kirim_whisp(message="Secret Message Terkirim", username=nama)
+                
 def kirim_pesan(message):
-    print(message)
+    pyautogui.typewrite('/')
+    pyautogui.press('backspace')
+    pyautogui.typewrite("/say "+message)
+    pyautogui.press('enter')
+    pyautogui.typewrite('/clearchat')
+    pyautogui.press('enter')
+
+def kirim_whisp(message, username):
+    pyautogui.typewrite('/')
+    pyautogui.press('backspace')
+    pyautogui.typewrite(f"/whisper {username} "+message)
+    pyautogui.press('enter')
+    pyautogui.typewrite('/clearchat')
+    pyautogui.press('enter')
 
 class Cmd:
     def menu(self, match):
@@ -129,24 +169,28 @@ class Cmd:
         current_hour = str(current_time.tm_hour) 
         current_minute = str(current_time.tm_min)
         def adminmenu():
-            kirim_pesan("> thr ")
-            kirim_pesan("> give <nama>")
-            kirim_pesan('> nama_keren')
-            kirim_pesan('> skin_cl')
+            kirim_pesan("> ai <text>")
+            kirim_pesan("> back")
             kirim_pesan("> day")
-            kirim_pesan("> (calculator)")
-            kirim_pesan("> quotes")
-            kirim_pesan("> puja")
+            kirim_pesan("> dice <angka>")
+            kirim_pesan("> kiss")
+            kirim_pesan("> lambai")
+            kirim_pesan("> laugh")
+            kirim_pesan("> lie")
+            kirim_pesan("> menu")
+            kirim_pesan("> nama_keren")
             kirim_pesan("> owner")
-            kirim_pesan("> ai")
-            kirim_pesan("> py!!<python code>!!")
-            kirim_pesan("> dice <value>")
-            kirim_pesan("< hunt")
-            kirim_pesan("< stats")
-            kirim_pesan("< buy")
-            kirim_pesan("< gacha")
-            kirim_pesan("< inven")
-            kirim_pesan("< use")
+            kirim_pesan("> puja")
+            kirim_pesan("> py <python code>")
+            kirim_pesan("> quotes")
+            kirim_pesan("> sit")
+            kirim_pesan("> sleep")
+            kirim_pesan("> stand")
+            kirim_pesan("> sm(Secret Message) <username> <pesan>")
+            kirim_pesan("> up (jumlah langkah) <atas>")
+            kirim_pesan("> dn (jumlah langkah) <bawah>")
+            kirim_pesan("> kr (jumlah langkah) <kiri>")
+            kirim_pesan("> kn (jumlah langkah) <kanan>")
 
         def menu():
             pesan_salam = f"Hai [{username}] Time: {current_hour}:{current_minute}"
@@ -155,18 +199,17 @@ class Cmd:
             time.sleep(4)
             kirim_pesan("Available menus:")
             time.sleep(2)
-            kirim_pesan("> thr ")
-            kirim_pesan("> give <nama>")
-            kirim_pesan('> nama_keren')
-            kirim_pesan('> skin_cl')
+            kirim_pesan("> ai <text>")
+            kirim_pesan("> back")
             kirim_pesan("> day")
-            kirim_pesan("> (pertambahan)")
-            kirim_pesan("> quotes")
-            kirim_pesan("> puja")
+            kirim_pesan("> dice <angka>")
+            kirim_pesan("> menu")
+            kirim_pesan("> nama_keren")
             kirim_pesan("> owner")
-            kirim_pesan("> ai")
-            kirim_pesan("> py!!<python code>!!")
-            kirim_pesan("> dice <value>")
+            kirim_pesan("> puja")
+            kirim_pesan("> py <python code>")
+            kirim_pesan("> quotes")
+
 
         if username in Admin_name: 
             pesan_salam = f"Hallo Tuan [{username}], Sekarang Jam: {current_hour}:{current_minute}"
@@ -331,18 +374,144 @@ class Cmd:
                     kirim_pesan(ceks)
             elif username not in Admin_name:
                 kirim_pesan(ceks)
-while True:
-    screen = pyautogui.screenshot().save("temp.png")
-    img = Image.open("temp.png")
-    text_cmd = pytesseract.image_to_string(img)
-    run = Cmd()
-    command('menu', run.menu)
-    command('nama_keren', run.nama_keren)
-    command('day', run.day)
-    command('dice', run.dice)
-    command('owner', run.owner)
-    command('quotes', run.quotes)
-    command('puja', run.puja)
-    command('py', run.py)
-    command('ai', run.ai)
-    os.remove("temp.png")
+                
+    def sit(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/sit')
+            pyautogui.press('enter')
+            kirim_pesan('saya duduk tuan')
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def stand(self, match):
+
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/stand')
+            pyautogui.press('enter')
+            kirim_pesan("saya berdiri tuan")
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def lie(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/lie')
+            pyautogui.press('enter')
+            kirim_pesan("Dilaksanakan")
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def lambai(self, match):
+
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('1')
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def back(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('4')
+            kirim_pesan('')
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def sleep(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/sleep')
+            pyautogui.press('enter')
+            kirim_pesan("Turu")
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def laugh(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/laugh')
+            pyautogui.press('enter')
+            kirim_pesan("wkwk")
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+
+    def kiss(self, match):
+        username = match.group(1)
+        if username in Admin_name:
+            pyautogui.typewrite('/kiss')
+            pyautogui.press('enter')
+            kirim_pesan("MUACHH")
+        else:
+            kirim_pesan("Anda tidak memiliki izin untuk menggunakan perintah ini.")
+    
+    def ban(self, match):
+        username = match.group(1)
+        target = match.group(2)
+        if username in Admin_name:
+            kirim_pesan(f"You don't have permission to ban {target}")
+                      
+    def kick(self, match):
+        username = match.group(1)
+        target = match.group(2)
+        if username in Admin_name:
+            kirim_pesan(f"You don't have permission to kick {target}")
+            
+def jokes():
+    idle_actions = jokes = [
+    "Kenapa ayam menyebrang jalan? Untuk ke seberang.",
+    "Dua jam lalu, ikan nabrak mobilku. Shock berat!",
+    "Pesimis=donat=lubang. Optimis=donat=2 cincin.",
+    "Programmer ganti lampu? Gak bisa, masalah hardware!",
+    "Komputer bilang apa ke komputer lain? Gak ada.",
+    "Udang goreng pakai apa? Balado. Kenapa? Biar udang gak sedih.",
+    "Beli baju baru, eh kekecilan. Pasti penjualnya kurus.",
+    "Kalo bebek jatuh, ngomong apa? 'Kwaw!' Kalo jatuh ke got? 'Kwek-kwek!'",
+    "Kenapa nyamuk kalo gigit suka gatal? Karena dia pake parfum bawang.",
+    "Kenapa maling kalo ketangkep polisi suka nangis? Karena dia lupa bawa tissue.",
+    "Kalo ketemu hantu, jangan panik. Cuma bilang, 'Permisi, mau lewat.'", 
+    "Kenapa Superman pake celana merah? Karena kalo pake celana biru, namanya Spiderman.", 
+    "Tadi beli semangka, pas dibelah isinya alpukat. Penjualnya bohong!", 
+    "Kalo lagi diinterview, ditanya 'Kekurangan kamu apa?', jawab aja, 'Kurang gajinya.'", 
+    "Kalo naik angkot, duduk di mana yg paling aman? Di pangkuan supir.", 
+    "Kenapa bebek kalo jalan ngelewer? Karena dia ga tau jalan yang benar.",
+    "Kenapa orang kalo ngomong suka pake bibir? Karena kalo pake telinga, nanti kedengeran.",
+    "Kalo ada orang jatuh dari pesawat, kenapa dia teriak 'Toloooong'? Karena dia ga bisa bisik.",
+    ]
+    p = random.choice(idle_actions)
+    kirim_pesan(p)
+
+if  __name__ == '__main__':
+    import pyautogui, pytesseract, base64, requests, time, subprocess, random, os, re
+    from datetime import datetime
+    from PIL import Image
+    last_activity_time = time.time()
+    while True:
+        current_time = time.time()
+        if current_time - last_activity_time > 180:
+            jokes()
+        screen = pyautogui.screenshot().save("temp.png")
+        img = Image.open("temp.png")
+        text_cmd = pytesseract.image_to_string(img)
+        run = Cmd()
+        command('menu', run.menu)
+        command('nama_keren', run.nama_keren)
+        command('day', run.day)
+        command('dice', run.dice)
+        command('owner', run.owner)
+        command('quotes', run.quotes)
+        command('puja', run.puja)
+        command('py', run.py)
+        command('ai', run.ai)
+        command('sit', run.sit)
+        command('stand', run.stand)
+        command('sleep', run.sleep)
+        command('lie', run.lie)
+        command('lambai', run.lambai)
+        command('back', run.back)
+        command('laugh', run.laugh)
+        command('kiss', run.laugh)
+        
+        os.remove("temp.png")
+        last_activity_time = current_time
