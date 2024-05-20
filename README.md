@@ -12,7 +12,7 @@ A Simple ChatBot for Pony Town
    Or download the repository directly from the GitHub page.
 
 2. **Install Tesseract:**
-   - Download and install Tesseract OCR from [here]([https://github.com/tesseract-ocr/tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
+   - Download and install Tesseract OCR from [here]([[https://github.com/tesseract-ocr/tesseract](https://github.com/UB-Mannheim/tesseract/wiki)]).
    - Follow the installation instructions provided in the Tesseract repository.
 
 3. **Get Gemini API Key:**
