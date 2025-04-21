@@ -1,8 +1,6 @@
-# PonyTown Bot
+# Pony Town Bot
 
 ## A Simple ChatBot for Pony Town
-
-## Pony Town Bot Release (1.0.0)
 
 ## Changelog
 
