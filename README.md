@@ -2,7 +2,7 @@
 
 ## A Simple ChatBot for Pony Town
 
-# Pony Town Bot Release (1.0.0)
+## Pony Town Bot Release (1.0.0)
 
 ## Changelog
 
@@ -27,4 +27,4 @@
 - **Android() Bridge**: Load & save setting (prefix, owner, chat type, dll) via `Android.save()` dan `Android.load()` untuk kompatibilitas Android WebView.
 - **configurableKey**: Support variabel config (`apiKey`, `botName`, `owner`, dll)
   
-# Download Pony Town Bot Release (1.0.0): [Pony Town Bot Release (1.0.0)](https://www.instagram.com/p/DIqEDweyxzg/?igsh=NHNraTB5MXpkZmJx)
+## Download Pony Town Bot Release (1.0.0): [Pony Town Bot Release (1.0.0)](https://www.instagram.com/p/DIqEDweyxzg/?igsh=NHNraTB5MXpkZmJx)
