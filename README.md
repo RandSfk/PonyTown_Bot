@@ -1,6 +1,6 @@
 # Pony Town Bot
 
-## A Simple ChatBot for Pony Town
+## How to make 24/7 chat bot in pony town
 
 ## Changelog
 
