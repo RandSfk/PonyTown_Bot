@@ -26,4 +26,4 @@
 - **configurableKey**: Support variabel config (`apiKey`, `botName`, `owner`, dll)
 
 ## How to use
-### Download Pony Town Bot Release (1.0.0): [Pony Town Bot Release (1.0.0)](https://www.instagram.com/p/DIqEDweyxzg/?igsh=NHNraTB5MXpkZmJx)
+### Download: [Pony Town Bot Release (1.0.0)](https://www.instagram.com/p/DIqEDweyxzg/?igsh=NHNraTB5MXpkZmJx)
